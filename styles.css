@@ -566,7 +566,7 @@ h1, h2, h3, h4 {
 }
 
 .project-content img {
-    display: none;
+    display: none; /* Não exibir imagens dentro dos cards principais */
 }
 
 .project-item:hover .project-content {
@@ -731,13 +731,20 @@ h1, h2, h3, h4 {
 }
 
 .project-modal .modal-left img {
-    max-width: 320px;    /* aumente para 400px ou 500px se quiser maior */
+    max-width: 520px;    /* imagem maior dentro do modal */
     width: 100%;
-    height: auto;
+    height: 380px;       /* altura fixa para visualização consistente */
     border-radius: 12px;
-    object-fit: contain;
+    object-fit: cover;   /* preenche o espaço, cortando proporcionalmente onde necessário */
     display: block;
     margin: 0;
+}
+
+@media (max-width: 767px) {
+    .project-modal .modal-left img {
+        height: 220px;    /* reduz em telas pequenas */
+        max-width: 100%;
+    }
 }
 
 .project-modal .modal-right {

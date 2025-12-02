@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Menu hamburguer
+    // Menu hambúrguer
     const menuToggle = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.sidebar');
     menuToggle.addEventListener('click', () => {
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Efeito de digitação na home
     const typingEl = document.querySelector('.typing-effect');
     if (typingEl) {
-        const text = 'Seja Bem-vindo ao Meu ';
+        const text = 'Seja bem-vindo ao meu ';
         const highlight = 'Portfólio';
         let i = 0, j = 0;
         typingEl.innerHTML = '<span class="typing-text"></span><span class="typing-cursor">|</span>';
