@@ -11,10 +11,72 @@
     <meta property="og:image" content="imagens/FotoPerfil.jpg">
     <meta property="og:url" content="https://gabriellima-portfolio.com">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260128i">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        // Define o estado inicial do overlay ANTES do primeiro paint (zero flicker).
+        // - Primeira entrada no site (apenas 1x por aba): mostra overlay e some após load.
+        // - Navegação interna com transição: próxima página já inicia com overlay visível.
+        (function () {
+            try {
+                var entered = sessionStorage.getItem('pt:entered') === '1';
+                var pending = sessionStorage.getItem('pt:pending') === '1';
+
+                // Tagline do badge (evita flicker definindo ANTES do paint)
+                var tagline = sessionStorage.getItem('pt:tagline') || 'Portfólio';
+                document.documentElement.style.setProperty('--pt-tagline', '"' + tagline.replace(/"/g, '\\"') + '"');
+
+                // Tempo mínimo do overlay (ms). Mantém a transição "premium" visível.
+                // Pode ser ajustado por navegação via sessionStorage (pt:minMs).
+                var defaultMinMs = 5000;
+                var minMs = Number(sessionStorage.getItem('pt:minMs') || String(defaultMinMs));
+                if (!Number.isFinite(minMs) || minMs <= 0) minMs = defaultMinMs;
+                var showUntilKey = 'pt:showUntil';
+
+                if (!entered || pending) {
+                    document.documentElement.classList.add('pt-overlay-visible');
+
+                    // Se ainda não existe um deadline, cria um.
+                    // Em navegação interna, o clique define isso antes de trocar de página.
+                    if (!sessionStorage.getItem(showUntilKey)) {
+                        sessionStorage.setItem(showUntilKey, String(Date.now() + minMs));
+                    }
+                }
+            } catch (e) {
+                // Se o storage estiver indisponível, preferimos mostrar (fail-safe).
+                document.documentElement.classList.add('pt-overlay-visible');
+            }
+        })();
+    </script>
 <body>
+    <div id="page-transition" class="page-transition" aria-hidden="true">
+        <div class="page-transition__timer" aria-hidden="true">
+            <span class="pt-t pt-t--br" aria-hidden="true"></span>
+            <span class="pt-t pt-t--r" aria-hidden="true"></span>
+            <span class="pt-t pt-t--t" aria-hidden="true"></span>
+            <span class="pt-t pt-t--l" aria-hidden="true"></span>
+            <span class="pt-t pt-t--bl" aria-hidden="true"></span>
+        </div>
+        <div class="page-transition__content" aria-hidden="true">
+            <div class="page-transition__badge" aria-hidden="true">
+                <svg class="page-transition__neon" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <rect class="page-transition__neon-base" x="1.5" y="1.5" width="97" height="37" rx="11" ry="11" pathLength="1000" />
+
+                    <rect class="page-transition__neon-glow page-transition__neon-anim page-transition__neon-anim--a" x="1.5" y="1.5" width="97" height="37" rx="11" ry="11" pathLength="1000" />
+                    <rect class="page-transition__neon-core page-transition__neon-anim page-transition__neon-anim--a" x="1.5" y="1.5" width="97" height="37" rx="11" ry="11" pathLength="1000" />
+
+                    <rect class="page-transition__neon-glow page-transition__neon-anim page-transition__neon-anim--b" x="1.5" y="1.5" width="97" height="37" rx="11" ry="11" pathLength="1000" />
+                    <rect class="page-transition__neon-core page-transition__neon-anim page-transition__neon-anim--b" x="1.5" y="1.5" width="97" height="37" rx="11" ry="11" pathLength="1000" />
+                </svg>
+                <div class="page-transition__brand">
+                    <div class="page-transition__title">Gabriel Lima</div>
+                    <div class="page-transition__tagline"></div>
+                </div>
+            </div>
+            <div class="page-transition__subtitle">Loading...</div>
+        </div>
+    </div>
     <div id="full-page-particles"></div>
 
     <aside class="sidebar">
@@ -318,6 +380,26 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Power BI - Adicionado pelo assistente -->
+                        <div class="project-item swiper-slide"
+                            data-project-id="powerbi"
+                            data-title="Dashboard Power BI (Projeto)"
+                            data-image="imagens/Projetos/EmDesenvolvimento.webp"
+                            data-description="Dashboard criado no Power BI para análise e visualização de indicadores. Nesta versão do portfólio, este card é um esqueleto: depois vamos adicionar as métricas, contexto e o link/embed oficial do relatório."
+                            data-languages='["powerbi", "sql"]'
+                            data-github="#"
+                            data-full-page="projeto-power-bi.html">
+                            <div class="project-content">
+                                <h4>Dashboard Power BI (Projeto)</h4>
+                                <img src="imagens/Projetos/EmDesenvolvimento.webp" alt="Projeto Power BI" loading="lazy">
+                                <p class="description-preview">Dashboard no Power BI com indicadores e insights (em breve).</p>
+                                <div class="project-languages">
+                                    <i class="fas fa-chart-column" aria-hidden="true"></i>
+                                    <i class="fas fa-database" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <h2 class="section-title">Projetos Pequenos</h2>
@@ -424,12 +506,16 @@
                         <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
                     </div>
                     <div class="skill-item">
+                        <span><i class="fab fa-python" aria-hidden="true"></i> Python - 70%</span>
+                        <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
+                    </div>
+                    <div class="skill-item">
                         <span><i class="fab fa-microsoft" aria-hidden="true"></i> C# - 50%</span>
                         <div class="progress-bar"><div class="progress" style="width: 50%;"></div></div>
                     </div>
                     <div class="skill-item">
-                        <span><i class="fab fa-java" aria-hidden="true"></i> Java - 30%</span>
-                        <div class="progress-bar"><div class="progress" style="width: 30%;"></div></div>
+                        <span><i class="fab fa-java" aria-hidden="true"></i> Java - 10%</span>
+                        <div class="progress-bar"><div class="progress" style="width: 10%;"></div></div>
                     </div>
                     <div class="skill-item">
                         <span><i class="fas fa-database" aria-hidden="true"></i> SQL - 95%</span>
@@ -445,6 +531,10 @@
                     </div>
                     <div class="skill-item">
                         <span><i class="fas fa-database" aria-hidden="true"></i> MongoDB - 60%</span>
+                        <div class="progress-bar"><div class="progress" style="width: 60%;"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <span><i class="fas fa-database" aria-hidden="true"></i> NoSQL - 60%</span>
                         <div class="progress-bar"><div class="progress" style="width: 60%;"></div></div>
                     </div>
                     <div class="skill-item">
@@ -564,15 +654,29 @@
                             Ver no GitHub <i class="fab fa-github" aria-hidden="true"></i>
                         </a>
                     </div>
+
+                    <div class="modal-live" id="modal-live" hidden>
+                        <a id="modal-live-link" href="#" class="btn btn-outline" data-open="app">
+                            Abrir app (tela cheia) <i class="fas fa-expand" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    <div class="modal-full-project" id="modal-full-project" hidden>
+                        <a id="modal-full-project-link" href="#" class="btn btn-outline" data-transition="page">
+                            Ver projeto completo <i class="fas fa-up-right-from-square" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <button class="back-to-top" aria-label="Voltar ao topo"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="page-transition.js?v=20260128h"></script>
+    <script src="script.js?v=20260128c"></script>
 </body>
 </html>
