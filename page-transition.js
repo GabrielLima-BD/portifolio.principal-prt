@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ao voltar para a página (BFCache), mostra o overlay de forma premium e some suave.
             try {
                 sessionStorage.removeItem(PENDING_KEY);
-                sessionStorage.setItem(SHOW_UNTIL_KEY, String(Date.now() + MIN_VISIBLE_MS));
+                sessionStorage.setItem(SHOW_UNTIL_KEY, String(Date.now() + getConfiguredMinVisibleMs()));
             } catch (err) {}
 
             setOverlayVisibleInstant();

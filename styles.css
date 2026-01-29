@@ -37,16 +37,23 @@
     z-index: 0;
     /* ajuste fino do “LED” */
     --pt-led-thickness: 1.6px;
+    --pt-led-core-opacity: 0.98;
+    --pt-led-glow-1: 18px;
+    --pt-led-glow-2: 42px;
+    --pt-led-glow-1a: 0.42;
+    --pt-led-glow-2a: 0.22;
+    --pt-led-halo-opacity: 0.52;
+    --pt-led-halo-blur: 10px;
     isolation: isolate;
 }
 
 /* Um único "LED" contínuo, desenhado por segmentos (sem pontilhado) */
 .pt-t {
     position: absolute;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, var(--pt-led-core-opacity));
     box-shadow:
-        0 0 10px rgba(255, 255, 255, 0.22),
-        0 0 26px rgba(255, 255, 255, 0.12);
+        0 0 var(--pt-led-glow-1) rgba(255, 255, 255, var(--pt-led-glow-1a)),
+        0 0 var(--pt-led-glow-2) rgba(255, 255, 255, var(--pt-led-glow-2a));
     border-radius: 999px;
     will-change: transform;
     z-index: 0;
@@ -57,10 +64,10 @@
     content: "";
     position: absolute;
     inset: calc(var(--pt-led-thickness) * -2);
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.75);
     border-radius: 999px;
-    filter: blur(8px);
-    opacity: 0.38;
+    filter: blur(var(--pt-led-halo-blur));
+    opacity: var(--pt-led-halo-opacity);
     z-index: -1;
 }
 
