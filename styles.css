@@ -37,15 +37,13 @@
     z-index: 0;
     /* Ajuste fino do “LED” */
     /* sub-pixel pode ficar acinzentado em alguns browsers/DPIs */
-    --pt-led-thickness: 3px;
-    --pt-led-glow-1: 22px;
-    --pt-led-glow-2: 64px;
-    --pt-led-glow-3: 120px;
+    /* Mais grosso/branco para não ficar “cinza” em DPI alto */
+    --pt-led-thickness: 4px;
+    /* Glow simplificado (menos camadas) para não parecer "várias linhas" */
+    --pt-led-glow-1: 26px;
+    --pt-led-glow-2: 70px;
     --pt-led-glow-1a: 0.95;
     --pt-led-glow-2a: 0.55;
-    --pt-led-glow-3a: 0.28;
-    --pt-led-halo-blur: 20px;
-    --pt-led-halo-opacity: 0.55;
 }
 
 /* Um único "LED" contínuo, desenhado por segmentos (sem pontilhado) */
@@ -55,21 +53,8 @@
     border-radius: 999px;
     box-shadow:
         0 0 var(--pt-led-glow-1) rgba(255, 255, 255, var(--pt-led-glow-1a)),
-        0 0 var(--pt-led-glow-2) rgba(255, 255, 255, var(--pt-led-glow-2a)),
-        0 0 var(--pt-led-glow-3) rgba(255, 255, 255, var(--pt-led-glow-3a));
+        0 0 var(--pt-led-glow-2) rgba(255, 255, 255, var(--pt-led-glow-2a));
     will-change: transform;
-}
-
-/* Halo (glow) atrás do LED */
-.pt-t::before {
-    content: "";
-    position: absolute;
-    inset: calc(var(--pt-led-thickness) * -3);
-    background: #ffffff;
-    border-radius: 999px;
-    filter: blur(var(--pt-led-halo-blur));
-    opacity: var(--pt-led-halo-opacity);
-    z-index: -1;
 }
 
 /* bottom: centro -> direita (50%) */
