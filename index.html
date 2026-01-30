@@ -23,6 +23,23 @@
                 var entered = sessionStorage.getItem('pt:entered') === '1';
                 var pending = sessionStorage.getItem('pt:pending') === '1';
 
+                // Se o usuário deu refresh (F5/Ctrl+R), mostramos o overlay/timer novamente.
+                // Isso evita a sensação de que “sumiu” após a primeira entrada.
+                var isReload = false;
+                try {
+                    var nav = performance && typeof performance.getEntriesByType === 'function'
+                        ? performance.getEntriesByType('navigation')[0]
+                        : null;
+                    if (nav && nav.type) {
+                        isReload = nav.type === 'reload';
+                    } else if (performance && performance.navigation) {
+                        // Legacy fallback (0=navigate, 1=reload, 2=back_forward)
+                        isReload = performance.navigation.type === 1;
+                    }
+                } catch (e) {
+                    // ignore
+                }
+
                 // Tagline do badge (evita flicker definindo ANTES do paint)
                 var tagline = sessionStorage.getItem('pt:tagline') || 'Portfólio';
                 document.documentElement.style.setProperty('--pt-tagline', '"' + tagline.replace(/"/g, '\\"') + '"');
@@ -34,7 +51,7 @@
                 if (!Number.isFinite(minMs) || minMs <= 0) minMs = defaultMinMs;
                 var showUntilKey = 'pt:showUntil';
 
-                if (!entered || pending) {
+                if (!entered || pending || isReload) {
                     document.documentElement.classList.add('pt-overlay-visible');
 
                     // Se ainda não existe um deadline, cria um.
